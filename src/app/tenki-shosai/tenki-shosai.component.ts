@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import axios from 'axios'
+import { ActivatedRoute, ParamMap } from '@angular/router';
 
 
 @Component({
@@ -11,16 +12,23 @@ export class TenkiShosaiComponent implements OnInit {
 
   otenkiresult = "わがんね";
 
-  constructor() { 
-    this.nara_tenki();
+  constructor(private activatedRoute: ActivatedRoute) { 
+    // this.nara_tenki();
    }
 
   ngOnInit(): void {
+    this.activatedRoute.paramMap.subscribe((params: ParamMap) => {
+      // ルーティングモジュールの「:id」部分の定義により、'id' で取得できる
+      const ken_num = params.get('ken_num');
+      if(ken_num){
+        this.tenki(ken_num);
+      }
+    });
   }
 
 
-  nara_tenki(): void {
-    let api_url: string = "https://weather.tsukumijima.net/api/forecast/city/290010";
+  tenki(ken_num: string): void {
+    let api_url: string = "https://weather.tsukumijima.net/api/forecast/city/" + ken_num;
 
     axios.get(
       api_url
