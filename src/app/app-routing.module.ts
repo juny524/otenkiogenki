@@ -10,7 +10,7 @@ const routes: Routes = [
   // パスに何も指定されないとKenListComponentが起動
   { path: '', component: KenListComponent },
   // パスにnextshosaiが指定されるとTenkiShosaiComponentが起動
-  { path: 'nextshosai', component: TenkiShosaiComponent }
+  { path: 'nextshosai/:ken_num', component: TenkiShosaiComponent }
 
 ];
 
