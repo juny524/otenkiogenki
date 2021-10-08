@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TenkiShosaiComponent } from './tenki-shosai/tenki-shosai.component';
 import { KenListComponent } from './ken-list/ken-list.component';
+import { JsondataService } from './jsondata.service';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,7 @@ import { KenListComponent } from './ken-list/ken-list.component';
     BrowserModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [JsondataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
