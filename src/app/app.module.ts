@@ -6,12 +6,14 @@ import { AppComponent } from './app.component';
 import { TenkiShosaiComponent } from './tenki-shosai/tenki-shosai.component';
 import { KenListComponent } from './ken-list/ken-list.component';
 import { JsondataService } from './jsondata.service';
+import { TenkiTextComponent } from './tenki-text/tenki-text.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TenkiShosaiComponent,
-    KenListComponent
+    KenListComponent,
+    TenkiTextComponent
   ],
   imports: [
     BrowserModule,

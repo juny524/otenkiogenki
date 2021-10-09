@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import axios from 'axios'
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import { JsondataService } from '../jsondata.service';
+import { Kendata } from '../kendata';
 
 
 @Component({
@@ -12,8 +14,10 @@ export class TenkiShosaiComponent implements OnInit {
 
   otenkiresult = "わがんね";
 
-  constructor(private activatedRoute: ActivatedRoute) { 
+  constructor(private activatedRoute: ActivatedRoute, private jsondata: JsondataService) { 
     // this.nara_tenki();
+    // this.kendata = new Kendata;
+    this.jsondata = new JsondataService();
    }
 
   ngOnInit(): void {
@@ -29,6 +33,7 @@ export class TenkiShosaiComponent implements OnInit {
 
   tenki(ken_num: string): void {
     let api_url: string = "https://weather.tsukumijima.net/api/forecast/city/" + ken_num;
+   
 
     axios.get(
       api_url
@@ -36,12 +41,29 @@ export class TenkiShosaiComponent implements OnInit {
     .then(res => {
       let tenki_json_obj = res.data;
 
-      console.info('token: 一応見れたかな？' + tenki_json_obj["forecasts"][0]["telop"] );
-      this.otenkiresult = tenki_json_obj["title"] + "は" + tenki_json_obj["forecasts"][0]["telop"];
+      let kendata: Kendata = new Kendata;
+      
+      // console.info('token: 一応見れたかな？' + tenki_json_obj["forecasts"][0]["telop"] );
+      kendata.result = true;
+      kendata.chiho_mei =  tenki_json_obj["title"];
+      kendata.tenki = tenki_json_obj["forecasts"][0]["telop"];
+      kendata.time = tenki_json_obj["publicTimeFormatted"];
+      kendata.bodyText = tenki_json_obj["description"]["bodyText"];
+      this.jsondata.changeData(kendata);
+      
+
     })
     .catch((e) => {
       if (e.response !== undefined) {
         console.error(e.response.data.error + "エラーになりました");
+      }
+      let kendata: Kendata = new Kendata;
+      kendata.result = false;
+      this.jsondata.changeData(kendata);
+    })
+    .finally(() => {
+      if(this.jsondata.getData().result){
+        this.otenkiresult = this.jsondata.getData().time + " 現在の " + this.jsondata.getData().chiho_mei + " は " + this.jsondata.getData().tenki;
       }
     });
 
