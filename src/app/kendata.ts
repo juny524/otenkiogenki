@@ -1,4 +1,7 @@
 export class Kendata {
-    ken_number: string = "";
-    ken_mei: string = "";
+    result: boolean = false;
+    time: string = "";
+    chiho_mei: string = "";
+    tenki: string = "";
+    bodyText: string = "";
 }
