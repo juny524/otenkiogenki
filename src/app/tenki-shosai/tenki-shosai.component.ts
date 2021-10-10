@@ -3,6 +3,7 @@ import axios from 'axios'
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { JsondataService } from '../jsondata.service';
 import { Kendata } from '../kendata';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -14,6 +15,9 @@ export class TenkiShosaiComponent implements OnInit {
 
   otenkiresult = "わがんね";
 
+  public serviceProp: String = 'Initialized by TenkiShosaiComponent';
+  private subscription!: Subscription;
+
   constructor(private activatedRoute: ActivatedRoute, private jsondata: JsondataService) { 
     // this.nara_tenki();
     // this.kendata = new Kendata;
@@ -21,6 +25,14 @@ export class TenkiShosaiComponent implements OnInit {
    }
 
   ngOnInit(): void {
+
+    this.subscription = this.jsondata.sharedDataSource$.subscribe(
+      msg => {
+        console.log('[Sample1Component] shared data updated.');
+        this.serviceProp = msg;
+      }
+    );
+
     this.activatedRoute.paramMap.subscribe((params: ParamMap) => {
       // ルーティングモジュールの「:id」部分の定義により、'id' で取得できる
       const ken_num = params.get('ken_num');
@@ -70,6 +82,12 @@ export class TenkiShosaiComponent implements OnInit {
 
 
     // this.items.push(api_url);
+  }
+
+  onClicSendMessage() {
+    // CommonService のデータ更新を行う
+    console.log('[Sample1Component] onClicSendMessage fired.');
+    this.jsondata.onNotifySharedDataChanged('Updated by Sample1Component.');
   }
 
 

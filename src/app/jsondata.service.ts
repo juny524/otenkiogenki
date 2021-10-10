@@ -4,6 +4,8 @@ import { TenkiShosaiComponent } from './tenki-shosai/tenki-shosai.component';
 import { KenListComponent } from './ken-list/ken-list.component';
 import { Kendata } from './kendata';
 import { BehaviorSubject } from 'rxjs';
+import { Subscription } from 'rxjs'
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +15,9 @@ export class JsondataService {
   private messageSource = new BehaviorSubject(new Kendata);
   kendata = this.messageSource.asObservable();
 
+  private sharedDataSource = new Subject<string>();
+  public sharedDataSource$ = this.sharedDataSource.asObservable();
+
   constructor() { }
 
   public changeData(kendata: Kendata): void{
@@ -21,6 +26,11 @@ export class JsondataService {
 
   public getData(): Kendata{
     return this.messageSource.getValue();
+  }
+
+  public onNotifySharedDataChanged(updateed: string) {
+    console.log('[CommonService] onNotifySharedDataChanged fired.');
+    this.sharedDataSource.next(updateed);
   }
 
   // public get data(): Kendata {

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { JsondataService } from './jsondata.service';
 
 
 @Component({
@@ -9,7 +10,7 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'おてんきげんき';
 
-  constructor(){
+  constructor(private jsondata: JsondataService){
   }
 
   ngOnInit(): void {
