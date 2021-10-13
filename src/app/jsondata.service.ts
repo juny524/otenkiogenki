@@ -6,6 +6,7 @@ import { Kendata } from './kendata';
 import { BehaviorSubject } from 'rxjs';
 import { Subscription } from 'rxjs'
 import { Subject } from 'rxjs';
+import { MessageService } from './message.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class JsondataService {
   private sharedDataSource = new Subject<string>();
   public sharedDataSource$ = this.sharedDataSource.asObservable();
 
-  constructor() { }
+  constructor(private messageService: MessageService) { }
 
   public changeData(kendata: Kendata): void{
     this.messageSource.next(kendata);
