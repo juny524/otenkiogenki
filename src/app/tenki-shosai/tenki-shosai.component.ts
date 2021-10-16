@@ -15,23 +15,15 @@ export class TenkiShosaiComponent implements OnInit {
 
   otenkiresult = "わがんね";
 
-  public serviceProp: String = 'Initialized by TenkiShosaiComponent';
   private subscription!: Subscription;
+  private kendata: Kendata = new Kendata;
 
   constructor(private activatedRoute: ActivatedRoute, private jsondata: JsondataService) { 
     // this.nara_tenki();
     // this.kendata = new Kendata;
-    this.jsondata = new JsondataService();
    }
 
   ngOnInit(): void {
-
-    this.subscription = this.jsondata.sharedDataSource$.subscribe(
-      msg => {
-        console.log('[Sample1Component] shared data updated.');
-        this.serviceProp = msg;
-      }
-    );
 
     this.activatedRoute.paramMap.subscribe((params: ParamMap) => {
       // ルーティングモジュールの「:id」部分の定義により、'id' で取得できる
@@ -52,16 +44,15 @@ export class TenkiShosaiComponent implements OnInit {
     )
     .then(res => {
       let tenki_json_obj = res.data;
-
-      let kendata: Kendata = new Kendata;
       
       // console.info('token: 一応見れたかな？' + tenki_json_obj["forecasts"][0]["telop"] );
-      kendata.result = true;
-      kendata.chiho_mei =  tenki_json_obj["title"];
-      kendata.tenki = tenki_json_obj["forecasts"][0]["telop"];
-      kendata.time = tenki_json_obj["publicTimeFormatted"];
-      kendata.bodyText = tenki_json_obj["description"]["bodyText"];
-      this.jsondata.changeData(kendata);
+      this.kendata.result = true;
+      this.kendata.chiho_mei =  tenki_json_obj["title"];
+      this.kendata.tenki = tenki_json_obj["forecasts"][0]["telop"];
+      this.kendata.time = tenki_json_obj["publicTimeFormatted"];
+      this.kendata.bodyText = tenki_json_obj["description"]["bodyText"];
+      this.otenkiresult = this.kendata.time + " 現在の " + this.kendata.chiho_mei + " は " + this.kendata.tenki;
+      
       
 
     })
@@ -69,14 +60,9 @@ export class TenkiShosaiComponent implements OnInit {
       if (e.response !== undefined) {
         console.error(e.response.data.error + "エラーになりました");
       }
-      let kendata: Kendata = new Kendata;
-      kendata.result = false;
-      this.jsondata.changeData(kendata);
+      this.kendata.result = false;
     })
     .finally(() => {
-      if(this.jsondata.getData().result){
-        this.otenkiresult = this.jsondata.getData().time + " 現在の " + this.jsondata.getData().chiho_mei + " は " + this.jsondata.getData().tenki;
-      }
     });
 
 
@@ -87,7 +73,7 @@ export class TenkiShosaiComponent implements OnInit {
   onClicSendMessage() {
     // CommonService のデータ更新を行う
     console.log('[Sample1Component] onClicSendMessage fired.');
-    this.jsondata.onNotifySharedDataChanged('Updated by Sample1Component.');
+    this.jsondata.onNotifySharedDataChanged(this.kendata);
   }
 
 

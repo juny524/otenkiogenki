@@ -16,32 +16,13 @@ export class JsondataService {
   private messageSource = new BehaviorSubject(new Kendata);
   kendata = this.messageSource.asObservable();
 
-  private sharedDataSource = new Subject<string>();
+  private sharedDataSource = new Subject<Kendata>();
   public sharedDataSource$ = this.sharedDataSource.asObservable();
 
-  constructor(private messageService: MessageService) { }
+  constructor() { }
 
-  public changeData(kendata: Kendata): void{
-    this.messageSource.next(kendata);
-  }
-
-  public getData(): Kendata{
-    return this.messageSource.getValue();
-  }
-
-  public onNotifySharedDataChanged(updateed: string) {
+  public onNotifySharedDataChanged(updateed: Kendata) {
     console.log('[CommonService] onNotifySharedDataChanged fired.');
     this.sharedDataSource.next(updateed);
   }
-
-  // public get data(): Kendata {
-  //   return this.kendata;
-  // }
-  // public add(kendata: Kendata): void {
-  //   this.kendata = kendata;
-  // }
-  // public delete(index: number): void {
-  //   this.kendatas.splice(index, 1);
-  // }
-
 }

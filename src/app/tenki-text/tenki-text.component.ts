@@ -18,23 +18,17 @@ export class TenkiTextComponent implements OnInit {
   private subscription!: Subscription;
 
   constructor(private jsondata: JsondataService) { 
-    this.bodyText = "gaergar";
+    this.bodyText = "上をクリックすると詳細がここに表示されるよ";
   }
 
   ngOnInit(): void {
-
     this.subscription = this.jsondata.sharedDataSource$.subscribe(
       msg => {
         console.log('[Sample1Component] shared data updated.');
-        this.bodyText = msg;
+        let kendata: Kendata = msg;
+        this.bodyText = kendata.bodyText;
       }
     );
-    
-  }
-
-  onClick() {
-    // this.bodyText = this.jsondata.getData().chiho_mei;
-    this.jsondata.onNotifySharedDataChanged('Updated by Sample2Component.');
   }
 
 }
